@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="css/app-main.css" rel="stylesheet" type="text/css">
+    <link href="css/ztree/ztree.css" rel="stylesheet" type="text/css">
+
+    <script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="js/ztree/jquery.ztree.core-v3.min.js"></script>
+
+    <script type="text/javascript">
+        var zTree;
+        var demoIframe;
+
+        var setting = {
+            view: {
+                dblClickExpand: false,
+                showLine: true,
+                selectedMulti: false
+            },
+            data: {
+                simpleData: {
+                    enable: true,
+                    idKey: "id",
+                    pIdKey: "pId",
+                    rootPId: ""
+                }
+            },
+            callback: {
+                beforeClick: function(treeId, treeNode) {
+                    var zTree = $.fn.zTree.getZTreeObj("menu-tree");
+                    if (treeNode.isParent) {
+                        zTree.expandNode(treeNode);
+                        return false;
+                    } else {
+                        $('#main-iframe').attr('src', treeNode.attachUrl);
+                        return true;
+                    }
+                }
+            }
+        };
+
+        var zNodes = [{
+                id: 1,
+                pId: 0,
+                name: "概览",
+                open: true
+            }, {
+                id: 101,
+                pId: 1,
+                name: "标准JSON数据",
+                attachUrl: "placement.html"
+            }, {
+                id: 102,
+                pId: 1,
+                name: "简单JSON数据",
+                attachUrl: ""
+            },
+
+            {
+                id: 2,
+                pId: 0,
+                name: "广告位",
+                open: false
+            }, {
+                id: 201,
+                pId: 2,
+                name: "ToutiaoNative",
+                attachUrl: ""
+            }, {
+                id: 202,
+                pId: 2,
+                name: "BaidBanner",
+                attachUrl: ""
+            },
+
+            {
+                id: 3,
+                pId: 0,
+                name: "广告位配置",
+                attachUrl: false
+            }, {
+                id: 301,
+                pId: 3,
+                name: "TestExpress",
+                attachUrl: ""
+            }, {
+                id: 302,
+                pId: 3,
+                name: "TestNative",
+                attachUrl: ""
+            },
+        ];
+
+        $(document).ready(function() {
+            var t = $("#menu-tree");
+            t = $.fn.zTree.init(t, setting, zNodes);
+            var zTree = $.fn.zTree.getZTreeObj("menu-tree");
+            zTree.selectNode(zTree.getNodeByParam("id", 101));
+        });
+    </script>
+
+</head>
+
+<body class="app-main-body">
+    <div class="app-main">
+        <div class="app-main-menu">
+            <ul id="menu-tree" class="ztree"></ul>
+        </div>
+        <div class="app-main-content">
+            <iframe id="main-iframe" src="placement.html" width="100%" height="100%"></iframe>
+        </div>
+    </div>
+
+</body>
+
+</html>
